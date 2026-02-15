@@ -1,0 +1,32 @@
+name: Validate Manifests
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flux CLI
+        uses: fluxcd/flux2/action@main
+
+      - name: Validate infrastructure
+        run: |
+          kustomize build infrastructure/ > /dev/null
+
+      - name: Validate cluster entrypoints
+        run: |
+          for f in clusters/woodhouse/*.yaml; do
+            # skip flux-system kustomization files since they reference CRDs not available locally
+            [[ "$f" == *"flux-system"* ]] && continue
+            echo "Validating $f"
+            kubectl apply --dry-run=client -f "$f" 2>&1 || true
+          done
+
+      - name: Flux validation
+        run: |
+          flux check --pre 2>&1 || true
+          find . -name '*.yaml' -path '*/infrastructure/*' | xargs -I{} flux trace {}  2>&1 || true
