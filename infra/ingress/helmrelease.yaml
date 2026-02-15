@@ -25,3 +25,5 @@ spec:
         enabled: true
         matchRule: Host(`traefik.local`)
         entryPoints: ["web"]
+    deployment:
+      kind: DaemonSet
