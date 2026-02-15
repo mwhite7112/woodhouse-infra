@@ -20,4 +20,5 @@ jobs:
 
       - name: Validate
         run: |
-          kustomize build infrastructure/ | kubeconform -strict -ignore-missing-schemas -summary
+          set -euo pipefail
+          kustomize build infra/ | kubeconform -strict -ignore-missing-schemas -summary
