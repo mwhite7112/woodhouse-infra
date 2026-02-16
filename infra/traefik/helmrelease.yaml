@@ -22,8 +22,6 @@ spec:
       type: ClusterIP
     ingressRoute:
       dashboard:
-        enabled: true
-        matchRule: Host(`traefik.local`)
-        entryPoints: ["web"]
+        enabled: false
     deployment:
       kind: DaemonSet
