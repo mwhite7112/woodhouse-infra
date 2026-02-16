@@ -11,7 +11,7 @@ woodhouse-infra/
 │   ├── infra.yaml             #   Kustomization → ./infra
 │   └── apps.yaml              #   Kustomization → ./apps (depends on infra)
 ├── infra/                     # Cluster infrastructure components
-│   ├── storage/               #   Local Path Provisioner
+│   ├── longhorn/              #   Longhorn distributed storage (HelmRelease)
 │   └── ingress/               #   Traefik (HelmRelease)
 ├── apps/                      # Application workloads
 └── docs/                      # You are here
@@ -43,8 +43,7 @@ Status key: **Deployed** | *Planned* | *Exploring*
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| Local Path Provisioner | **Deployed** | Current default StorageClass — to be replaced by Longhorn |
-| Longhorn | *Planned* | Rancher distributed storage — will replace Local Path Provisioner as default StorageClass |
+| Longhorn | **Deployed** | Distributed replicated storage — default StorageClass |
 | Central database | *Exploring* | Likely a shared PostgreSQL instance |
 | Object storage | *Exploring* | Likely MinIO for S3-compatible blob storage |
 
@@ -88,20 +87,21 @@ Key files:
 
 Design notes: Using a DaemonSet with hostPorts instead of a LoadBalancer service. This is well-suited for bare-metal / on-prem clusters where there is no cloud load balancer. Every node directly handles ingress traffic on ports 80 and 443.
 
-### Local Path Provisioner
+### Longhorn
 
-- **Namespace:** `local-path-storage`
-- **Version:** v0.0.34 (Rancher)
-- **StorageClass:** `local-path` (cluster default)
-- **Volume binding:** `WaitForFirstConsumer` — volumes bind to the node where the pod is scheduled
-- **Reclaim policy:** Delete
-- **Host path:** `/var/local-path-provisioner`
+- **Namespace:** `longhorn-system` (pod-security: `privileged`)
+- **Install method:** HelmRelease (chart v1.9.x from `https://charts.longhorn.io`)
+- **StorageClass:** `longhorn` (cluster default)
+- **Replica count:** 2
+- **Data path:** `/var/lib/longhorn`
+- **Disk selection:** Only nodes labeled `node.longhorn.io/create-default-disk=true` (worker nodes)
 
 Key files:
-- `infra/storage/local-path-provisioner.yaml`
-- `infra/storage/configmap.yaml`
+- `infra/longhorn/helmrelease.yaml`
+- `infra/longhorn/helmrepository.yaml`
+- `infra/longhorn/namespace.yaml`
 
-Design notes: Simple node-local provisioner suitable for single-node or dev clusters. No replication — data lives on one node. Will be replaced by Longhorn for replicated, distributed storage.
+Design notes: Distributed block storage with 2-replica redundancy across worker nodes. Requires `iscsi-tools` and `util-linux-tools` Talos system extensions and a `/var/lib/longhorn` kubelet extra mount on all nodes. Replaces the previous Local Path Provisioner which had no replication.
 
 ## Flux Configuration
 
@@ -110,4 +110,4 @@ Design notes: Simple node-local provisioner suitable for single-node or dev clus
 - **Infrastructure sync:** every 30 minutes, pruning enabled
 - **Apps sync:** every 30 minutes, depends on `infra` Kustomization
 - **Controllers:** source, kustomize, helm, notification, image-reflector, image-automation
-- **Helm sources:** Traefik charts repo (1h refresh)
+- **Helm sources:** Traefik charts repo (1h refresh), Longhorn charts repo (1h refresh)
