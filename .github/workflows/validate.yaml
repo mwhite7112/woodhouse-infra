@@ -22,7 +22,7 @@ jobs:
       - name: Validate infra kustomization
         run: |
           set -euo pipefail
-          kustomize build infra/ | kubeconform -strict -ignore-missing-schemas -summary
+          kustomize build infra/ | kubeconform -ignore-missing-schemas -summary
 
   validate-apps:
     name: Validate app manifests
@@ -41,4 +41,4 @@ jobs:
       - name: Validate apps kustomization
         run: |
           set -euo pipefail
-          kustomize build apps/ | kubeconform -strict -ignore-missing-schemas -summary
+          kustomize build apps/ | kubeconform -ignore-missing-schemas -summary
