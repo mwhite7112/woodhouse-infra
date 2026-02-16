@@ -17,7 +17,9 @@ woodhouse-infra/
 │   ├── cloudflare-tunnel/     #   Cloudflare Tunnel (raw manifests)
 │   ├── longhorn/              #   Longhorn distributed storage (HelmRelease)
 │   ├── rbac/                  #   Namespaces, ServiceAccounts, ClusterRoleBindings
-│   └── traefik/               #   Traefik ingress controller (HelmRelease)
+│   ├── traefik/               #   Traefik ingress controller (HelmRelease)
+│   ├── victoria-logs/         #   VictoriaLogs log aggregation (HelmRelease)
+│   └── victoria-metrics/      #   VictoriaMetrics + Grafana observability stack (HelmRelease)
 ├── apps/                      # Application workloads
 ├── .githooks/                 # Git hooks (pre-commit: block unencrypted Secrets)
 ├── docs/                      # You are here
@@ -58,9 +60,9 @@ Status key: **Deployed** | *Planned* | *Exploring*
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| VictoriaMetrics | *Planned* | Metrics collection — chosen over Prometheus for lower memory footprint |
-| Grafana | *Exploring* | Dashboards |
-| VictoriaLogs | *Planned* | Log aggregation — chosen over Loki for lower memory footprint |
+| VictoriaMetrics | **Deployed** | Metrics collection (VMSingle + VMAgent) — see [observability.md](observability.md) |
+| Grafana | **Deployed** | Dashboards at `grafana.woodlab.work` — see [observability.md](observability.md) |
+| VictoriaLogs | **Deployed** | Log aggregation with Vector shipper — see [observability.md](observability.md) |
 
 ### App Development Services
 
@@ -85,6 +87,7 @@ Status key: **Deployed** | *Planned* | *Exploring*
 | [Cloudflare Tunnel](cloudflare-tunnel.md) | Outbound-only tunnel to Cloudflare edge for `woodlab.work` |
 | [Longhorn](longhorn.md) | Distributed replicated block storage |
 | [Cert-manager](cert-manager.md) | Automated TLS certificate provisioning |
+| [Observability](observability.md) | VictoriaMetrics, VictoriaLogs, Grafana |
 | [Managing Secrets](managing-secrets.md) | SOPS + age encryption workflow |
 | [Exposing Services](exposing-services.md) | How to connect an app to `woodlab.work` |
 | [New User Access](new-user-access.md) | Creating cluster-admin kubeconfigs |
@@ -98,4 +101,4 @@ Status key: **Deployed** | *Planned* | *Exploring*
 - **Cert-issuers sync:** every 30 minutes, depends on `infra` Kustomization
 - **SOPS decryption:** enabled on all Kustomizations via `sops-age` Secret
 - **Controllers:** source, kustomize, helm, notification, image-reflector, image-automation
-- **Helm sources:** Traefik charts repo (1h refresh), Longhorn charts repo (1h refresh), cert-manager charts repo (1h refresh)
+- **Helm sources:** Traefik charts repo (1h refresh), Longhorn charts repo (1h refresh), cert-manager charts repo (1h refresh), VictoriaMetrics charts repo (1h refresh)

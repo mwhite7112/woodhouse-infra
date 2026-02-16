@@ -6,3 +6,5 @@ resources:
   - longhorn
   - rbac
   - traefik
+  - victoria-logs
+  - victoria-metrics
