@@ -40,11 +40,6 @@ spec:
           - grafana.woodlab.work
       plugins:
         - victoriametrics-logs-datasource
-      additionalDataSources:
-        - name: VictoriaLogs
-          type: victoriametrics-logs-datasource
-          url: http://victoria-logs-server.monitoring.svc.cluster.local:9428
-          access: proxy
 
     prometheus-node-exporter:
       enabled: true
