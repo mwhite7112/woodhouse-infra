@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: unencrypted-test
+  namespace: cluster-admin-sa
+type: Opaque
+stringData:
+  test: "this-should-be-blocked"
