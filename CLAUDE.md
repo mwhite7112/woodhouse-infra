@@ -26,3 +26,4 @@ New infrastructure goes under `infra/<component-name>/` with a `kustomization.ya
 - Cluster: 3 bare-metal machines running Talos Linux — 1 control plane (8GB), 2 workers (16GB each)
 - Flux version: v2.7.5
 - See `docs/cluster-overview.md` for the full cluster plan and component details
+- Please ensure to keep docs up to date with the cluster

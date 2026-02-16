@@ -14,10 +14,12 @@ woodhouse-infra/
 ├── infra/                     # Cluster infrastructure components
 │   ├── cert-manager/          #   cert-manager (HelmRelease)
 │   ├── cert-issuers/          #   ClusterIssuers (depends on cert-manager CRDs)
+│   ├── cloudflare-tunnel/     #   Cloudflare Tunnel (raw manifests)
 │   ├── longhorn/              #   Longhorn distributed storage (HelmRelease)
 │   ├── rbac/                  #   Namespaces, ServiceAccounts, ClusterRoleBindings
 │   └── traefik/               #   Traefik ingress controller (HelmRelease)
 ├── apps/                      # Application workloads
+├── .githooks/                 # Git hooks (pre-commit: block unencrypted Secrets)
 ├── docs/                      # You are here
 └── .sops.yaml                 # SOPS encryption config (age public key)
 ```
@@ -42,7 +44,7 @@ Status key: **Deployed** | *Planned* | *Exploring*
 | Traefik | **Deployed** | Ingress controller — see [details below](#traefik) |
 | Cert-manager | **Deployed** | Automated SSL/TLS certificate provisioning — see [details below](#cert-manager) |
 | Cilium | *Planned* | eBPF-based CNI for container networking |
-| Cloudflare Tunnel | *Planned* | Expose services to the internet without open ports |
+| Cloudflare Tunnel | **Deployed** | Outbound-only tunnel to Cloudflare edge — see [details below](#cloudflare-tunnel) |
 
 ### Storage
 
@@ -122,6 +124,25 @@ Key files:
 - `infra/cert-issuers/self-signed-issuer.yaml`
 
 Design notes: ClusterIssuers are in a separate Kustomization (`cert-issuers`) because they depend on cert-manager CRDs existing first. The `cert-issuers` Kustomization depends on `infra`, which ensures cert-manager is installed before issuers are applied.
+
+### Cloudflare Tunnel
+
+- **Namespace:** `cloudflare-tunnel` (pod-security: `baseline`)
+- **Install method:** Raw manifests (Deployment + ConfigMap + Secret)
+- **Replicas:** 2
+- **Image:** `cloudflare/cloudflared:2025.2.1`
+- **Backend:** `http://traefik.traefik.svc.cluster.local:80` (catch-all)
+- **Metrics:** Exposed on port 2000 (`/ready` endpoint)
+
+Key files:
+- `infra/cloudflare-tunnel/deployment.yaml`
+- `infra/cloudflare-tunnel/tunnel-config.yaml`
+- `infra/cloudflare-tunnel/tunnel-credentials.yaml` (SOPS-encrypted)
+- `infra/cloudflare-tunnel/namespace.yaml`
+
+Design notes: Cloudflare Tunnel creates outbound-only connections from the cluster to Cloudflare's edge network — no inbound ports, firewall rules, or router changes needed. All traffic flows through the tunnel to Traefik, which handles per-service routing via IngressRoutes. Adding a new service only requires a Traefik IngressRoute and a DNS CNAME; no cloudflared config changes are needed.
+
+Traffic flow: `User → Cloudflare Edge → Tunnel → cloudflared pod → Traefik → IngressRoute → App`
 
 ### SOPS + age
 
