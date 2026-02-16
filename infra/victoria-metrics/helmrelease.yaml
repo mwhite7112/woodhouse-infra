@@ -1,0 +1,61 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: victoria-metrics-k8s-stack
+  namespace: monitoring
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: victoria-metrics-k8s-stack
+      version: "0.71.x"
+      sourceRef:
+        kind: HelmRepository
+        name: victoriametrics
+  values:
+    vmsingle:
+      enabled: true
+      spec:
+        retentionPeriod: "30d"
+        storage:
+          storageClassName: longhorn
+          resources:
+            requests:
+              storage: 20Gi
+
+    vmagent:
+      enabled: true
+      spec:
+        scrapeInterval: "30s"
+
+    grafana:
+      enabled: true
+      admin:
+        existingSecret: grafana-admin
+        userKey: admin-user
+        passwordKey: admin-password
+      ingress:
+        enabled: true
+        hosts:
+          - grafana.woodlab.work
+      plugins:
+        - victoriametrics-logs-datasource
+      additionalDataSources:
+        - name: VictoriaLogs
+          type: victoriametrics-logs-datasource
+          url: http://victoria-logs-server.monitoring.svc.cluster.local:9428
+          access: proxy
+
+    prometheus-node-exporter:
+      enabled: true
+      resources:
+        requests:
+          cpu: 50m
+          memory: 30Mi
+
+    kube-state-metrics:
+      enabled: true
+      resources:
+        requests:
+          cpu: 10m
+          memory: 30Mi
