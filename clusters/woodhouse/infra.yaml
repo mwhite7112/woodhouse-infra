@@ -6,6 +6,10 @@ metadata:
 spec:
   interval: 30m
   retryInterval: 1m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   sourceRef:
     kind: GitRepository
     name: flux-system
