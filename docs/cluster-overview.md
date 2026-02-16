@@ -9,12 +9,17 @@ woodhouse-infra/
 ├── clusters/woodhouse/       # Flux bootstrap & top-level Kustomizations
 │   ├── flux-system/           #   Flux controllers, GitRepository source
 │   ├── infra.yaml             #   Kustomization → ./infra
-│   └── apps.yaml              #   Kustomization → ./apps (depends on infra)
+│   ├── cert-issuers.yaml      #   Kustomization → ./infra/cert-issuers (depends on infra)
+│   └── apps.yaml              #   Kustomization → ./apps (depends on infra, cert-issuers)
 ├── infra/                     # Cluster infrastructure components
+│   ├── cert-manager/          #   cert-manager (HelmRelease)
+│   ├── cert-issuers/          #   ClusterIssuers (depends on cert-manager CRDs)
 │   ├── longhorn/              #   Longhorn distributed storage (HelmRelease)
-│   └── ingress/               #   Traefik (HelmRelease)
+│   ├── rbac/                  #   Namespaces, ServiceAccounts, ClusterRoleBindings
+│   └── traefik/               #   Traefik ingress controller (HelmRelease)
 ├── apps/                      # Application workloads
-└── docs/                      # You are here
+├── docs/                      # You are here
+└── .sops.yaml                 # SOPS encryption config (age public key)
 ```
 
 Flux syncs `clusters/woodhouse/` from the `main` branch of `mwhite7112/woodhouse-infra`. Infrastructure reconciles before apps via a dependency chain.
@@ -27,15 +32,15 @@ Status key: **Deployed** | *Planned* | *Exploring*
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| Secrets management | *Planned* | TBD — SOPS, Sealed Secrets, or external provider |
-| Cluster RBAC | *Planned* | Beyond what individual components define |
+| Secrets management | **Deployed** | SOPS + age — see [managing-secrets.md](managing-secrets.md) |
+| Cluster RBAC | **Deployed** | ServiceAccount + ClusterRoleBinding in `infra/rbac/` |
 
 ### Networking
 
 | Component | Status | Notes |
 |-----------|--------|-------|
 | Traefik | **Deployed** | Ingress controller — see [details below](#traefik) |
-| Cert-manager | *Planned* | Automated SSL/TLS certificate provisioning |
+| Cert-manager | **Deployed** | Automated SSL/TLS certificate provisioning — see [details below](#cert-manager) |
 | Cilium | *Planned* | eBPF-based CNI for container networking |
 | Cloudflare Tunnel | *Planned* | Expose services to the internet without open ports |
 
@@ -78,12 +83,12 @@ Status key: **Deployed** | *Planned* | *Exploring*
 - **Install method:** HelmRelease (chart v34.x from `https://traefik.github.io/charts`)
 - **Deployment mode:** DaemonSet — runs on every node for distributed ingress
 - **Service type:** ClusterIP with `hostPort` on 80 (HTTP) and 443 (HTTPS)
-- **Dashboard:** Enabled at `http://traefik.local` on the web entrypoint
+- **Dashboard:** Disabled
 
 Key files:
-- `infra/ingress/helmrelease.yaml`
-- `infra/ingress/helmrepository.yaml`
-- `infra/ingress/namespace.yaml`
+- `infra/traefik/helmrelease.yaml`
+- `infra/traefik/helmrepository.yaml`
+- `infra/traefik/namespace.yaml`
 
 Design notes: Using a DaemonSet with hostPorts instead of a LoadBalancer service. This is well-suited for bare-metal / on-prem clusters where there is no cloud load balancer. Every node directly handles ingress traffic on ports 80 and 443.
 
@@ -103,11 +108,40 @@ Key files:
 
 Design notes: Distributed block storage with 2-replica redundancy across worker nodes. Requires `iscsi-tools` and `util-linux-tools` Talos system extensions and a `/var/lib/longhorn` kubelet extra mount on all nodes. Replaces the previous Local Path Provisioner which had no replication.
 
+### Cert-manager
+
+- **Namespace:** `cert-manager`
+- **Install method:** HelmRelease (chart v1.17.x from `https://charts.jetstack.io`)
+- **CRDs:** Installed and kept by Helm (`crds.enabled: true`, `crds.keep: true`)
+- **ClusterIssuers:** `self-signed` (deployed via separate `cert-issuers` Kustomization that depends on `infra`)
+
+Key files:
+- `infra/cert-manager/helmrelease.yaml`
+- `infra/cert-manager/helmrepository.yaml`
+- `infra/cert-manager/namespace.yaml`
+- `infra/cert-issuers/self-signed-issuer.yaml`
+
+Design notes: ClusterIssuers are in a separate Kustomization (`cert-issuers`) because they depend on cert-manager CRDs existing first. The `cert-issuers` Kustomization depends on `infra`, which ensures cert-manager is installed before issuers are applied.
+
+### SOPS + age
+
+- **Encryption:** SOPS with age keypair
+- **Decryption Secret:** `sops-age` in `flux-system` namespace
+- **Scope:** All three Kustomizations (`infra`, `apps`, `cert-issuers`) have SOPS decryption configured
+- **Encrypted fields:** Only `data` and `stringData` on Secrets (via `encrypted_regex` in `.sops.yaml`)
+
+Key files:
+- `.sops.yaml`
+
+Design notes: Secrets are encrypted locally with `sops --encrypt --in-place` before committing. Flux decrypts at apply time using the age private key stored in the `sops-age` cluster Secret. See [managing-secrets.md](managing-secrets.md) for the workflow.
+
 ## Flux Configuration
 
 - **Flux version:** v2.7.5
 - **Git source:** `main` branch, synced every 1 minute
 - **Infrastructure sync:** every 30 minutes, pruning enabled
-- **Apps sync:** every 30 minutes, depends on `infra` Kustomization
+- **Apps sync:** every 30 minutes, depends on `infra` and `cert-issuers` Kustomizations
+- **Cert-issuers sync:** every 30 minutes, depends on `infra` Kustomization
+- **SOPS decryption:** enabled on all Kustomizations via `sops-age` Secret
 - **Controllers:** source, kustomize, helm, notification, image-reflector, image-automation
-- **Helm sources:** Traefik charts repo (1h refresh), Longhorn charts repo (1h refresh)
+- **Helm sources:** Traefik charts repo (1h refresh), Longhorn charts repo (1h refresh), cert-manager charts repo (1h refresh)
