@@ -5,6 +5,35 @@ on:
     branches: [main]
 
 jobs:
+  check-unencrypted-secrets:
+    name: Check for unencrypted Secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan for unencrypted Secrets
+        run: |
+          set -euo pipefail
+          failed=0
+          for file in $(find infra/ apps/ -name '*.yaml' -o -name '*.yml'); do
+            if ! grep -q 'kind: Secret' "$file"; then
+              continue
+            fi
+            if ! grep -qE '^(data|stringData):' "$file"; then
+              continue
+            fi
+            if ! grep -q '^sops:' "$file"; then
+              echo "ERROR: $file is an unencrypted Secret."
+              failed=1
+            fi
+          done
+          if [ "$failed" -eq 1 ]; then
+            echo ""
+            echo "Unencrypted Secrets found. Run: sops --encrypt --in-place <file>"
+            exit 1
+          fi
+          echo "All Secrets are encrypted."
+
   validate-infra:
     name: Validate infra manifests
     runs-on: ubuntu-latest

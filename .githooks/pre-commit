@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Pre-commit hook: block commits containing unencrypted Kubernetes Secrets.
+set -euo pipefail
+
+failed=0
+
+for file in $(git diff --cached --name-only --diff-filter=ACM -- '*.yaml' '*.yml'); do
+    # Skip files that aren't Secrets
+    if ! grep -q 'kind: Secret' "$file"; then
+        continue
+    fi
+
+    # Skip Secrets with no data/stringData (e.g. service-account-token Secrets)
+    if ! grep -qE '^(data|stringData):' "$file"; then
+        continue
+    fi
+
+    # Secret has data — must have sops metadata
+    if ! grep -q '^sops:' "$file"; then
+        echo "ERROR: $file is an unencrypted Secret."
+        echo "       Run: sops --encrypt --in-place $file"
+        failed=1
+    fi
+done
+
+if [ "$failed" -eq 1 ]; then
+    echo ""
+    echo "Commit blocked: encrypt Secrets with sops before committing."
+    exit 1
+fi
