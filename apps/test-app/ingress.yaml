@@ -5,7 +5,7 @@ metadata:
   namespace: test-app
 spec:
   rules:
-    - host: test-app.local
+    - host: test-app.woodlab.work
       http:
         paths:
           - path: /
