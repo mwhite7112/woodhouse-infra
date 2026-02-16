@@ -58,6 +58,18 @@ Prints the decrypted YAML to stdout without modifying the file.
 - Each encrypted file has a `sops:` metadata block baked in. Flux reads this block at apply time and decrypts using the `sops-age` Secret in the `flux-system` namespace.
 - Unencrypted Secrets (like ServiceAccount token Secrets with no `data`/`stringData`) are applied as-is — Flux only decrypts files that have the `sops:` metadata.
 
+## Safeguards
+
+A pre-commit hook and a CI check both scan for unencrypted Secrets. If a Secret has `data` or `stringData` but no `sops:` metadata, the commit (or PR) will be blocked.
+
+To enable the pre-commit hook after cloning:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+This only needs to be done once per clone. The CI check runs automatically on every PR regardless.
+
 ## Things to remember
 
 - Always encrypt before committing. Plaintext secret values must never appear in git history.
