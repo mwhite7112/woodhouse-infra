@@ -61,7 +61,7 @@ data:
             icon: traefik.png
             widget:
               type: traefik
-              url: http://traefik.traefik.svc.cluster.local:9000
+              url: http://traefik.traefik.svc.cluster.local:8080
         - Cloudflare Tunnel:
             href: https://dash.cloudflare.com
             description: Secure tunnel to Cloudflare edge
