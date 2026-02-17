@@ -16,6 +16,7 @@ woodhouse-infra/
 │   ├── cert-issuers/          #   ClusterIssuers (depends on cert-manager CRDs)
 │   ├── cloudflare-tunnel/     #   Cloudflare Tunnel (raw manifests)
 │   ├── longhorn/              #   Longhorn distributed storage (HelmRelease)
+│   ├── metrics-server/        #   Kubernetes metrics API (HelmRelease)
 │   ├── rbac/                  #   Namespaces, ServiceAccounts, ClusterRoleBindings
 │   ├── traefik/               #   Traefik ingress controller (HelmRelease)
 │   ├── victoria-logs/         #   VictoriaLogs log aggregation (HelmRelease)
@@ -61,6 +62,7 @@ Status key: **Deployed** | *Planned* | *Exploring*
 
 | Component | Status | Notes |
 |-----------|--------|-------|
+| Metrics Server | **Deployed** | Kubernetes metrics API for node/pod CPU & memory |
 | VictoriaMetrics | **Deployed** | Metrics collection (VMSingle + VMAgent) — see [observability.md](observability.md) |
 | Grafana | **Deployed** | Dashboards at `grafana.woodlab.work` — see [observability.md](observability.md) |
 | VictoriaLogs | **Deployed** | Log aggregation with Vector shipper — see [observability.md](observability.md) |
@@ -102,4 +104,4 @@ Status key: **Deployed** | *Planned* | *Exploring*
 - **Cert-issuers sync:** every 30 minutes, depends on `infra` Kustomization
 - **SOPS decryption:** enabled on all Kustomizations via `sops-age` Secret
 - **Controllers:** source, kustomize, helm, notification, image-reflector, image-automation
-- **Helm sources:** Traefik charts repo (1h refresh), Longhorn charts repo (1h refresh), cert-manager charts repo (1h refresh), VictoriaMetrics charts repo (1h refresh)
+- **Helm sources:** Traefik charts repo (1h refresh), Longhorn charts repo (1h refresh), cert-manager charts repo (1h refresh), VictoriaMetrics charts repo (1h refresh), Metrics Server charts repo (1h refresh)

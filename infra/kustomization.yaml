@@ -4,6 +4,7 @@ resources:
   - cert-manager
   - cloudflare-tunnel
   - longhorn
+  - metrics-server
   - rbac
   - traefik
   - victoria-logs

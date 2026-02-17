@@ -18,6 +18,9 @@ spec:
         hostPort: 80
       websecure:
         hostPort: 443
+      traefik:
+        expose:
+          default: true
     service:
       type: ClusterIP
     ingressRoute:
