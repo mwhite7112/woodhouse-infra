@@ -21,6 +21,7 @@ woodhouse-infra/
 │   ├── victoria-logs/         #   VictoriaLogs log aggregation (HelmRelease)
 │   └── victoria-metrics/      #   VictoriaMetrics + Grafana observability stack (HelmRelease)
 ├── apps/                      # Application workloads
+│   ├── homepage/              #   Homepage dashboard (raw manifests)
 ├── .githooks/                 # Git hooks (pre-commit: block unencrypted Secrets)
 ├── docs/                      # You are here
 └── .sops.yaml                 # SOPS encryption config (age public key)
@@ -75,7 +76,7 @@ Status key: **Deployed** | *Planned* | *Exploring*
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| Service dashboard / homepage | *Exploring* | e.g. Homepage, Heimdall, Homer |
+| Homepage | **Deployed** | Service dashboard at `homepage.woodlab.work` — [gethomepage.dev](https://gethomepage.dev) |
 
 ---
 
