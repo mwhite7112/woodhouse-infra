@@ -12,6 +12,9 @@ data:
     title: Woodhouse
     favicon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/homepage.png
     headerStyle: clean
+    providers:
+      longhorn:
+        url: http://longhorn-frontend.longhorn-system.svc.cluster.local
     layout:
       Observability:
         style: row
@@ -51,9 +54,6 @@ data:
             href: https://longhorn.woodlab.work
             description: Distributed block storage
             icon: longhorn.png
-            widget:
-              type: longhorn
-              url: http://longhorn-frontend.longhorn-system.svc.cluster.local
     - Networking:
         - Traefik:
             href: https://traefik.woodlab.work/dashboard/
@@ -79,6 +79,11 @@ data:
           cpu: true
           memory: true
           showLabel: true
+    - longhorn:
+        expanded: true
+        total: true
+        labels: true
+        nodes: true
     - search:
         provider: google
         target: _blank
