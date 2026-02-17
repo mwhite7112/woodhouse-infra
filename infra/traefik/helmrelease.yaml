@@ -21,8 +21,8 @@ spec:
       traefik:
         expose:
           default: true
-    api:
-      insecure: true
+    additionalArguments:
+      - "--api.insecure=true"
     service:
       type: ClusterIP
     ingressRoute:
