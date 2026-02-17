@@ -48,7 +48,7 @@ data:
             icon: victoriametrics.png
     - Storage:
         - Longhorn:
-            href: http://longhorn-frontend.longhorn-system.svc.cluster.local
+            href: https://longhorn.woodlab.work
             description: Distributed block storage
             icon: longhorn.png
             widget:
@@ -56,7 +56,7 @@ data:
               url: http://longhorn-frontend.longhorn-system.svc.cluster.local
     - Networking:
         - Traefik:
-            href: http://traefik.traefik.svc.cluster.local:9000/dashboard/
+            href: https://traefik.woodlab.work/dashboard/
             description: Ingress controller
             icon: traefik.png
             widget:
