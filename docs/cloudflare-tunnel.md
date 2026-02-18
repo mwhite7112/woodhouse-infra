@@ -47,3 +47,63 @@ cloudflared tunnel info woodhouse
 ```
 
 Tunnel credentials are stored as a SOPS-encrypted Secret in the cluster. See [Managing Secrets](managing-secrets.md) if you need to rotate them.
+
+## Remote kubectl access
+
+The K8s API is exposed through the tunnel at `k8s.woodlab.work`, protected by Cloudflare Access (email whitelist).
+
+### Traffic flow
+
+```
+kubectl → cloudflared access tcp (local :6444) → Cloudflare Edge → Tunnel → cloudflared pod → kubernetes.default.svc.cluster.local:443
+```
+
+### Ingress rule
+
+The tunnel config includes a hostname-specific rule for `k8s.woodlab.work` that routes TCP traffic directly to the in-cluster K8s API, before the catch-all Traefik rule.
+
+### Setup (manual steps)
+
+**1. Cloudflare Access application**
+
+In the Cloudflare Zero Trust dashboard, create a self-hosted application:
+
+- **Application domain:** `k8s.woodlab.work`
+- **Policy:** Allow — identity rule using email list
+- **Session duration:** 24h
+
+**2. DNS (if not already covered by wildcard)**
+
+```bash
+cloudflared tunnel route dns woodhouse k8s.woodlab.work
+```
+
+**3. Client-side `cloudflared` proxy**
+
+Run this on your local machine to proxy kubectl traffic through the tunnel:
+
+```bash
+cloudflared access tcp --hostname k8s.woodlab.work --url 127.0.0.1:6444
+```
+
+For persistent access, run this as a background service / systemd unit.
+
+**4. Kubeconfig**
+
+Update your kubeconfig to point at the local proxy:
+
+```yaml
+clusters:
+  - cluster:
+      server: https://127.0.0.1:6444
+      # Keep the existing certificate-authority-data or use
+      # insecure-skip-tls-verify: true if the API cert doesn't
+      # cover 127.0.0.1
+    name: woodhouse
+```
+
+**5. Verify**
+
+```bash
+kubectl get nodes
+```
