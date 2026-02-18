@@ -12,4 +12,6 @@ data:
     ingress:
       - hostname: k8s.woodlab.work
         service: tcp://kubernetes.default.svc.cluster.local:443
+        originRequest:
+          noTLSVerify: true
       - service: http://traefik.traefik.svc.cluster.local:80
