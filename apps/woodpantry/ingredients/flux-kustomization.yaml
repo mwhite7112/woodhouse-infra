@@ -18,4 +18,4 @@ spec:
       name: sops-age
   postBuild:
     substitute:
-      IMAGE_TAG: "latest"
+      IMAGE_TAG: "e1776f2"
