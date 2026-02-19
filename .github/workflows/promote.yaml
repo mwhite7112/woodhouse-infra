@@ -49,4 +49,5 @@ jobs:
           git add apps/woodpantry/${{ inputs.service }}/flux-kustomization.yaml
           git diff --staged --quiet && echo "No changes to commit" && exit 0
           git commit -m "chore: promote woodpantry/${{ inputs.service }} to ${{ inputs.image_tag }}"
-          git push
+          git remote set-url origin "https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git"
+          git push origin main
