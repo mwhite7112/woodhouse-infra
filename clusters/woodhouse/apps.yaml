@@ -18,4 +18,4 @@ spec:
     name: flux-system
   path: ./apps
   prune: true
-  wait: true
+  wait: false 
