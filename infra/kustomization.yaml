@@ -5,6 +5,7 @@ resources:
   - cloudnative-pg
   - cloudflare-tunnel
   - longhorn
+  - metallb
   - metrics-server
   - rbac
   - traefik

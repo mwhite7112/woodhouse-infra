@@ -13,11 +13,6 @@ spec:
       labels:
         app: pihole
     spec:
-      # Pin to a specific worker node so DNS resolves to a stable IP.
-      # Label your chosen worker: kubectl label node <node-name> pihole-dns=true
-      # Clients should point to that node's IP as their DNS server.
-      nodeSelector:
-        pihole-dns: "true"
       containers:
         - name: pihole
           image: pihole/pihole:latest
@@ -34,11 +29,9 @@ spec:
           ports:
             - name: dns-udp
               containerPort: 53
-              hostPort: 53
               protocol: UDP
             - name: dns-tcp
               containerPort: 53
-              hostPort: 53
               protocol: TCP
             - name: http
               containerPort: 80
