@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: dictionary-db
+  namespace: woodpantry
+spec:
+  name: dictionary_db
+  owner: ingredients
+  cluster:
+    name: woodpantry-postgres
