@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: woodpantry-ingredients
+  namespace: flux-system
+spec:
+  interval: 5m
+  url: https://github.com/mwhite7112/woodpantry-ingredients
+  ref:
+    branch: main

@@ -11,6 +11,14 @@ spec:
       database: app
       owner: app
 
+  managed:
+    roles:
+      - name: ingredients
+        ensure: present
+        login: true
+        passwordSecret:
+          name: ingredients-role-password
+
   storage:
     storageClass: longhorn
     size: 5Gi

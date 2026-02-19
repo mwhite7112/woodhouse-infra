@@ -15,6 +15,7 @@ woodhouse-infra/
 │   ├── cert-manager/          #   cert-manager (HelmRelease)
 │   ├── cert-issuers/          #   ClusterIssuers (depends on cert-manager CRDs)
 │   ├── cloudflare-tunnel/     #   Cloudflare Tunnel (raw manifests)
+│   ├── cloudnative-pg/        #   CloudNativePG operator (HelmRelease)
 │   ├── longhorn/              #   Longhorn distributed storage (HelmRelease)
 │   ├── metrics-server/        #   Kubernetes metrics API (HelmRelease)
 │   ├── rbac/                  #   Namespaces, ServiceAccounts, ClusterRoleBindings
@@ -23,6 +24,9 @@ woodhouse-infra/
 │   └── victoria-metrics/      #   VictoriaMetrics + Grafana observability stack (HelmRelease)
 ├── apps/                      # Application workloads
 │   ├── homepage/              #   Homepage dashboard (raw manifests)
+│   └── woodpantry/            #   WoodPantry microservices
+│       ├── postgres/          #     Shared CloudNativePG cluster (woodpantry-postgres)
+│       └── ingredients/       #     Ingredient Dictionary Service
 ├── .githooks/                 # Git hooks (pre-commit: block unencrypted Secrets)
 ├── docs/                      # You are here
 └── .sops.yaml                 # SOPS encryption config (age public key)
@@ -55,7 +59,7 @@ Status key: **Deployed** | *Planned* | *Exploring*
 | Component | Status | Notes |
 |-----------|--------|-------|
 | Longhorn | **Deployed** | Distributed replicated storage — see [longhorn.md](longhorn.md) |
-| Central database | *Exploring* | Likely a shared PostgreSQL instance |
+| CloudNativePG | *Planned* | Shared PostgreSQL operator — one `Cluster` per app, separate DB per service |
 | Object storage | *Exploring* | Likely MinIO for S3-compatible blob storage |
 
 ### Observability
