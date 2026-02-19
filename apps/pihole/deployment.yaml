@@ -13,14 +13,11 @@ spec:
       labels:
         app: pihole
     spec:
-      # Pin to control plane node so DNS resolves to a stable IP.
-      # Clients should point to the control plane node's IP as their DNS server.
+      # Pin to a specific worker node so DNS resolves to a stable IP.
+      # Label your chosen worker: kubectl label node <node-name> pihole-dns=true
+      # Clients should point to that node's IP as their DNS server.
       nodeSelector:
-        node-role.kubernetes.io/control-plane: ""
-      tolerations:
-        - key: node-role.kubernetes.io/control-plane
-          operator: Exists
-          effect: NoSchedule
+        pihole-dns: "true"
       containers:
         - name: pihole
           image: pihole/pihole:latest
