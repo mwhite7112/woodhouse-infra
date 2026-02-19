@@ -16,4 +16,4 @@ spec:
     size: 5Gi
 
   monitoring:
-    enablePodMonitor: true
+    enablePodMonitor: false
