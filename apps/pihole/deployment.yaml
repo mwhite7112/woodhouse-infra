@@ -13,14 +13,6 @@ spec:
       labels:
         app: pihole
     spec:
-      # Pin to control plane node so DNS resolves to a stable IP.
-      # Clients should point to the control plane node's IP as their DNS server.
-      nodeSelector:
-        node-role.kubernetes.io/control-plane: ""
-      tolerations:
-        - key: node-role.kubernetes.io/control-plane
-          operator: Exists
-          effect: NoSchedule
       containers:
         - name: pihole
           image: pihole/pihole:latest
@@ -37,11 +29,9 @@ spec:
           ports:
             - name: dns-udp
               containerPort: 53
-              hostPort: 53
               protocol: UDP
             - name: dns-tcp
               containerPort: 53
-              hostPort: 53
               protocol: TCP
             - name: http
               containerPort: 80
