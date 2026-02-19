@@ -15,4 +15,4 @@ spec:
         namespace: flux-system
   values:
     monitoring:
-      podMonitorEnabled: true
+      podMonitorEnabled: false
