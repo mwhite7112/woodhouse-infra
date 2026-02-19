@@ -4,28 +4,26 @@ Network-wide ad blocking via DNS. The pod is pinned to the control plane node us
 
 ## Network-wide ad blocking setup
 
-Once deployed, point your router's DHCP DNS server to the control plane node's IP. Clients will automatically use Pi-hole for DNS resolution.
-
-The admin UI is accessible at `pihole.woodlab.work`.
-
-## Multiple control plane nodes
-
-The current `nodeSelector` matches **any** control plane node. With a single control plane this is fine, but if you add a second control plane node the pod could reschedule to either one, changing the DNS IP and breaking client DNS until the router is updated.
-
-To fix this, label one specific node and use that instead:
+Pi-hole runs on a worker node labeled `pihole-dns=true`. Label your chosen worker before deploying:
 
 ```bash
 kubectl label node <node-name> pihole-dns=true
 ```
 
-Then update the `nodeSelector` in `deployment.yaml`:
+Then point your router's DHCP DNS server to that worker node's IP. Clients will automatically use Pi-hole for DNS resolution.
 
-```yaml
-nodeSelector:
-  pihole-dns: "true"
+The admin UI is accessible at `pihole.woodlab.work`.
+
+## Changing which node Pi-hole runs on
+
+Remove the label from the current node and add it to the new one:
+
+```bash
+kubectl label node <old-node> pihole-dns-
+kubectl label node <new-node> pihole-dns=true
 ```
 
-This pins Pi-hole to exactly one node without exposing any hostname or IP in the repo.
+Update your router's DNS to point to the new node's IP.
 
 ## Secret
 
