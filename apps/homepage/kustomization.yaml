@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - rbac.yaml
+  - pihole-secret.yaml
   - configmap.yaml
   - deployment.yaml
   - service.yaml

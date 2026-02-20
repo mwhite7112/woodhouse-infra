@@ -24,7 +24,7 @@ data:
         columns: 1
       Networking:
         style: row
-        columns: 2
+        columns: 3
   custom.css: ""
   custom.js: ""
   bookmarks.yaml: |
@@ -66,6 +66,15 @@ data:
             href: https://dash.cloudflare.com
             description: Secure tunnel to Cloudflare edge
             icon: cloudflare.png
+        - Pi-hole:
+            href: https://pihole.woodlab.work
+            description: Network-wide ad blocking
+            icon: pi-hole.png
+            widget:
+              type: pihole
+              url: http://pihole.pihole.svc.cluster.local
+              version: 6
+              key: "{{HOMEPAGE_VAR_PIHOLE_PASSWORD}}"
   widgets.yaml: |
     - kubernetes:
         cluster:

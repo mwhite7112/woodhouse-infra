@@ -32,6 +32,11 @@ spec:
           env:
             - name: HOMEPAGE_ALLOWED_HOSTS
               value: homepage.woodlab.work
+            - name: HOMEPAGE_VAR_PIHOLE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pihole-secret
+                  key: password
           resources:
             requests:
               cpu: 10m
