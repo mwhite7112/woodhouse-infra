@@ -26,6 +26,8 @@ spec:
                 secretKeyRef:
                   name: pihole-secret
                   key: password
+            - name: FTLCONF_webserver_acl
+              value: "+all"
           ports:
             - name: dns-udp
               containerPort: 53
