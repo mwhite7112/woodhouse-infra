@@ -67,7 +67,7 @@ data:
             description: Secure tunnel to Cloudflare edge
             icon: cloudflare.png
         - Pi-hole:
-            href: https://pihole.woodlab.work
+            href: https://pihole.woodlab.work/admin
             description: Network-wide ad blocking
             icon: pi-hole.png
             widget:
