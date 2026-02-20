@@ -19,9 +19,9 @@ spec:
           env:
             - name: TZ
               value: "UTC"
-            - name: PIHOLE_DNS_
+            - name: FTLCONF_dns_upstreams
               value: "1.1.1.1;1.0.0.1"
-            - name: WEBPASSWORD
+            - name: FTLCONF_webserver_api_password
               valueFrom:
                 secretKeyRef:
                   name: pihole-secret
