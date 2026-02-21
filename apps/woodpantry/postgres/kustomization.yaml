@@ -4,3 +4,7 @@ resources:
   - cluster.yaml
   - ingredients-role-password.yaml
   - database-ingredients.yaml
+  - recipes-role-password.yaml
+  - database-recipes.yaml
+  - pantry-role-password.yaml
+  - database-pantry.yaml

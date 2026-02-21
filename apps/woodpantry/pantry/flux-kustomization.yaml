@@ -1,0 +1,21 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: woodpantry-pantry
+  namespace: flux-system
+spec:
+  interval: 10m
+  retryInterval: 1m
+  path: ./kubernetes
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: woodpantry-pantry
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  postBuild:
+    substitute:
+      IMAGE_TAG: "8009c4a"

@@ -18,6 +18,16 @@ spec:
         login: true
         passwordSecret:
           name: ingredients-role-password
+      - name: recipes
+        ensure: present
+        login: true
+        passwordSecret:
+          name: recipes-role-password
+      - name: pantry
+        ensure: present
+        login: true
+        passwordSecret:
+          name: pantry-role-password
 
   storage:
     storageClass: longhorn

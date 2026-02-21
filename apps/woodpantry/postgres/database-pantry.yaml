@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: pantry-db
+  namespace: woodpantry
+spec:
+  name: pantry_db
+  owner: pantry
+  cluster:
+    name: woodpantry-postgres
