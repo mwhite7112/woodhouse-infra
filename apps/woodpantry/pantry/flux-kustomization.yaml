@@ -18,4 +18,4 @@ spec:
       name: sops-age
   postBuild:
     substitute:
-      IMAGE_TAG: "2358bd4"
+      IMAGE_TAG: "c1ddf26"
