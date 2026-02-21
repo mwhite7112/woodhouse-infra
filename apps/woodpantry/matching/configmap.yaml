@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: matching-config
+  namespace: woodpantry
+data:
+  pantry_url: http://pantry.woodpantry.svc.cluster.local
+  recipe_url: http://recipes.woodpantry.svc.cluster.local
+  dictionary_url: http://ingredients.woodpantry.svc.cluster.local
