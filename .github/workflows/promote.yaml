@@ -4,9 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       service:
-        description: "Service name (e.g. ingredients, recipes, pantry)"
+        description: "Service to promote"
         required: true
-        type: string
+        type: choice
+        options:
+          - ingredients
+          - recipes
+          - pantry
+          - matching
       image_tag:
         description: "7-character SHA from the merged PR (e.g. a1b2c3d)"
         required: true
