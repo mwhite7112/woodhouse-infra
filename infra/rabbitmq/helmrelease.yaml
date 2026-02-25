@@ -1,0 +1,54 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: rabbitmq
+  namespace: rabbitmq
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: rabbitmq
+      version: "16.x"
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+  values:
+    replicaCount: 1
+
+    auth:
+      username: woodpantry
+      existingPasswordSecret: rabbitmq-credentials
+      existingSecretPasswordKey: rabbitmq-password
+      existingErlangSecret: rabbitmq-credentials
+      existingSecretErlangKey: rabbitmq-erlang-cookie
+
+    persistence:
+      enabled: true
+      storageClass: longhorn
+      size: 5Gi
+
+    extraConfiguration: |
+      load_definitions = /etc/rabbitmq/definitions.json
+
+    extraVolumes:
+      - name: rabbitmq-definitions
+        configMap:
+          name: rabbitmq-definitions
+
+    extraVolumeMounts:
+      - name: rabbitmq-definitions
+        mountPath: /etc/rabbitmq/definitions.json
+        subPath: definitions.json
+        readOnly: true
+
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: false
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        memory: 512Mi

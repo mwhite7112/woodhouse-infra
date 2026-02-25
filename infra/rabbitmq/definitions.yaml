@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-definitions
+  namespace: rabbitmq
+data:
+  definitions.json: |
+    {
+      "exchanges": [
+        {
+          "name": "woodpantry.topic",
+          "vhost": "/",
+          "type": "topic",
+          "durable": true,
+          "auto_delete": false
+        }
+      ],
+      "queues": [
+        {
+          "name": "pantry.ingest.queue",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false
+        },
+        {
+          "name": "pantry.updated.queue",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false
+        },
+        {
+          "name": "recipe.import.queue",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false
+        },
+        {
+          "name": "recipe.imported.queue",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false
+        },
+        {
+          "name": "shopping_list.queue",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false
+        }
+      ],
+      "bindings": [
+        {
+          "source": "woodpantry.topic",
+          "vhost": "/",
+          "destination": "pantry.ingest.queue",
+          "destination_type": "queue",
+          "routing_key": "pantry.ingest.requested"
+        },
+        {
+          "source": "woodpantry.topic",
+          "vhost": "/",
+          "destination": "pantry.updated.queue",
+          "destination_type": "queue",
+          "routing_key": "pantry.updated"
+        },
+        {
+          "source": "woodpantry.topic",
+          "vhost": "/",
+          "destination": "recipe.import.queue",
+          "destination_type": "queue",
+          "routing_key": "recipe.import.requested"
+        },
+        {
+          "source": "woodpantry.topic",
+          "vhost": "/",
+          "destination": "recipe.imported.queue",
+          "destination_type": "queue",
+          "routing_key": "recipe.imported"
+        },
+        {
+          "source": "woodpantry.topic",
+          "vhost": "/",
+          "destination": "shopping_list.queue",
+          "destination_type": "queue",
+          "routing_key": "shopping_list.requested"
+        }
+      ]
+    }
