@@ -14,4 +14,4 @@ spec:
     name: woodpantry-matching
   postBuild:
     substitute:
-      IMAGE_TAG: "35e8e6b"
+      IMAGE_TAG: "a0a081e"
