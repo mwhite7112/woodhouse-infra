@@ -27,6 +27,8 @@ spec:
               value: https://ntfy.woodlab.work
             - name: NTFY_LISTEN_HTTP
               value: ":80"
+            - name: NTFY_UPSTREAM_BASE_URL
+              value: https://ntfy.sh
           ports:
             - name: http
               containerPort: 80
