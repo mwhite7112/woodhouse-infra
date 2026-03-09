@@ -9,6 +9,6 @@ resources:
   - metrics-server
   - rbac
   - traefik
-  - rabbitmq
+#  - rabbitmq
   - victoria-logs
   - victoria-metrics
