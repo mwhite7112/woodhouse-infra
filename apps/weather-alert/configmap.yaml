@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: weather-alert-config
+  namespace: weather-alert
+data:
+  CITY_NAME: New York,US
+  TEMP_THRESHOLD_F: "60"
+  RAIN_PROBABILITY_MAX: "0.30"
+  LOG_LEVEL: INFO

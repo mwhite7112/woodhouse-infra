@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: weather-alert
+  namespace: weather-alert
+spec:
+  schedule: "0 1 * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: weather-alert
+              image: ghcr.io/jacksonbryan710/weather-alert:latest
+              imagePullPolicy: Always
+              envFrom:
+                - configMapRef:
+                    name: weather-alert-config
+                - secretRef:
+                    name: weather-alert-secrets
+              resources:
+                requests:
+                  memory: "64Mi"
+                  cpu: "50m"
+                limits:
+                  memory: "128Mi"
