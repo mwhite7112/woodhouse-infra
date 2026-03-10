@@ -6,4 +6,4 @@ resources:
   - woodpantry
   - pihole
   - ntfy
-  
+  - weather-alert
