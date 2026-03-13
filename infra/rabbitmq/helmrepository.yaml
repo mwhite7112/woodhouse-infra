@@ -4,6 +4,5 @@ metadata:
   name: bitnami
   namespace: rabbitmq
 spec:
-  type: oci
   interval: 1h
-  url: oci://registry-1.docker.io/bitnamicharts
+  url: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
