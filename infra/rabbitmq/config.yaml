@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-config
+  namespace: rabbitmq
+data:
+  20-definitions.conf: |
+    management.load_definitions = /etc/rabbitmq/definitions.json
+    prometheus.return_per_object_metrics = true
