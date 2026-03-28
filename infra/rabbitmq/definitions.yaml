@@ -6,6 +6,18 @@ metadata:
 data:
   definitions.json: |
     {
+      "vhosts": [
+        {"name": "/"}
+      ],
+      "permissions": [
+        {
+          "user": "woodpantry",
+          "vhost": "/",
+          "configure": ".*",
+          "write": ".*",
+          "read": ".*"
+        }
+      ],
       "exchanges": [
         {
           "name": "woodpantry.topic",
