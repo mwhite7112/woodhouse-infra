@@ -62,6 +62,10 @@ data:
             widget:
               type: traefik
               url: http://traefik.traefik.svc.cluster.local:8080
+        - RabbitMQ:
+            href: https://rabbitmq.woodlab.work
+            description: Message broker management UI
+            icon: rabbitmq.png
         - Cloudflare Tunnel:
             href: https://dash.cloudflare.com
             description: Secure tunnel to Cloudflare edge
