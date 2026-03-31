@@ -18,6 +18,7 @@ woodhouse-infra/
 │   ├── cloudnative-pg/        #   CloudNativePG operator (HelmRelease)
 │   ├── longhorn/              #   Longhorn distributed storage (HelmRelease)
 │   ├── metrics-server/        #   Kubernetes metrics API (HelmRelease)
+│   ├── rabbitmq/              #   RabbitMQ broker (raw manifests)
 │   ├── rbac/                  #   Namespaces, ServiceAccounts, ClusterRoleBindings
 │   ├── traefik/               #   Traefik ingress controller (HelmRelease)
 │   ├── victoria-logs/         #   VictoriaLogs log aggregation (HelmRelease)
@@ -76,7 +77,7 @@ Status key: **Deployed** | *Planned* | *Exploring*
 | Component | Status | Notes |
 |-----------|--------|-------|
 | Redis | *Planned* | Caching / session store |
-| Message queue | *Exploring* | TBD — NATS, RabbitMQ, etc. |
+| RabbitMQ | **Deployed** | Event backbone at `rabbitmq.rabbitmq.svc.cluster.local:5672`, management UI at `rabbitmq.woodlab.work` |
 
 ### Misc
 
