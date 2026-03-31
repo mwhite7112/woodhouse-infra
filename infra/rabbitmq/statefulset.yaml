@@ -27,9 +27,9 @@ spec:
             - name: metrics
               containerPort: 15692
           env:
-            - name: RABBITMQ_BOOTSTRAP_USER
+            - name: RABBITMQ_DEFAULT_USER
               value: woodpantry
-            - name: RABBITMQ_BOOTSTRAP_PASS
+            - name: RABBITMQ_DEFAULT_PASS
               valueFrom:
                 secretKeyRef:
                   name: rabbitmq-credentials
@@ -39,18 +39,6 @@ spec:
                 secretKeyRef:
                   name: rabbitmq-credentials
                   key: rabbitmq-erlang-cookie
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/sh
-                  - -ec
-                  - |
-                    rabbitmqctl await_startup
-                    rabbitmqctl add_user "${RABBITMQ_BOOTSTRAP_USER}" "${RABBITMQ_BOOTSTRAP_PASS}" 2>/dev/null || \
-                      rabbitmqctl change_password "${RABBITMQ_BOOTSTRAP_USER}" "${RABBITMQ_BOOTSTRAP_PASS}"
-                    rabbitmqctl set_user_tags "${RABBITMQ_BOOTSTRAP_USER}" administrator
-                    rabbitmqctl set_permissions -p / "${RABBITMQ_BOOTSTRAP_USER}" ".*" ".*" ".*"
           volumeMounts:
             - name: data
               mountPath: /var/lib/rabbitmq
