@@ -17,8 +17,8 @@ spec:
           restartPolicy: Never
           containers:
             - name: weather-alert
-              image: ghcr.io/jacksonbryan710/weather-alert:latest
-              imagePullPolicy: Always
+              image: ghcr.io/jacksonbryan710/weather-alert:770b48f7940348fb697b9489ba99e4bd55f21550@sha256:ec0cfbb39c6d5ea876c40e1f4b39b8898feeb3e750d9fe956f3a76e0c926f45d
+              imagePullPolicy: IfNotPresent
               envFrom:
                 - configMapRef:
                     name: weather-alert-config

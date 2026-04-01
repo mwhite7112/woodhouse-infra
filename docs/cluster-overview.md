@@ -35,6 +35,11 @@ woodhouse-infra/
 
 Flux syncs `clusters/woodhouse/` from the `main` branch of `mwhite7112/woodhouse-infra`. Infrastructure reconciles before apps via a dependency chain.
 
+Repo-managed supply chain policy:
+
+- Raw OCI images are pinned as `<tag>@sha256:<digest>`.
+- HelmReleases use exact chart versions, not floating `x` ranges.
+
 ## Cluster Plan
 
 Status key: **Deployed** | *Planned* | *Exploring*

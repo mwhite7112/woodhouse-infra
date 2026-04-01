@@ -16,6 +16,8 @@ Flux-managed Kubernetes infrastructure repo for the Woodhouse cluster.
 
 Flux watches the `main` branch and syncs `clusters/woodhouse/`. The `infra` Kustomization must reconcile successfully before `apps` begins syncing. Each subdirectory under `infra/` and `apps/` has its own `kustomization.yaml` and is included by the parent.
 
+Raw OCI images managed directly in this repo should be pinned as `<tag>@sha256:<digest>`. HelmReleases should use exact chart versions rather than floating ranges.
+
 ## Adding Infrastructure Components
 
 New infrastructure goes under `infra/<component-name>/` with a `kustomization.yaml`. Add the directory to `infra/kustomization.yaml` resources list. Helm-based components use a `HelmRepository` + `HelmRelease`; raw manifests are applied directly.

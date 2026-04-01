@@ -3,7 +3,7 @@
 Distributed replicated block storage — the cluster's default StorageClass.
 
 - **Namespace:** `longhorn-system` (pod-security: `privileged`)
-- **Install method:** HelmRelease (chart v1.9.x from `https://charts.longhorn.io`)
+- **Install method:** HelmRelease (chart `1.9.2` from `https://charts.longhorn.io`)
 - **StorageClass:** `longhorn` (cluster default)
 - **Replica count:** 2
 - **Data path:** `/var/lib/longhorn`

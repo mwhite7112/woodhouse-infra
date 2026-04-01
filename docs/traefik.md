@@ -3,7 +3,7 @@
 Ingress controller for the Woodhouse cluster.
 
 - **Namespace:** `traefik` (pod-security: `privileged`)
-- **Install method:** HelmRelease (chart v34.x from `https://traefik.github.io/charts`)
+- **Install method:** HelmRelease (chart `34.5.0` from `https://traefik.github.io/charts`)
 - **Deployment mode:** DaemonSet — runs on every node for distributed ingress
 - **Service type:** ClusterIP with `hostPort` on 80 (HTTP) and 443 (HTTPS)
 - **Dashboard:** Disabled
