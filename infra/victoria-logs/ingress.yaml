@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: victorialogs
+  namespace: monitoring
+spec:
+  rules:
+    - host: victorialogs.woodlab.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: victoria-logs-server
+                port:
+                  number: 9428

@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: victoriametrics
+  namespace: monitoring
+spec:
+  rules:
+    - host: victoriametrics.woodlab.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vmsingle-victoria-metrics-k8s-stack
+                port:
+                  number: 8428
