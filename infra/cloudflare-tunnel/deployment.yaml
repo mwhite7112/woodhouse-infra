@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: cloudflared
-          image: cloudflare/cloudflared:2025.2.1
+          image: cloudflare/cloudflared:2025.2.1@sha256:03737f27c38ecfb257a55664953cac510727cf27052c51ddb7c8ff1a2b9969e1
+          imagePullPolicy: IfNotPresent
           args:
             - tunnel
             - --config

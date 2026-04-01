@@ -3,7 +3,7 @@
 Automated TLS certificate provisioning.
 
 - **Namespace:** `cert-manager`
-- **Install method:** HelmRelease (chart v1.17.x from `https://charts.jetstack.io`)
+- **Install method:** HelmRelease (chart `v1.17.4` from `https://charts.jetstack.io`)
 - **CRDs:** Installed and kept by Helm (`crds.enabled: true`, `crds.keep: true`)
 - **ClusterIssuers:** `self-signed` (deployed via separate `cert-issuers` Kustomization that depends on `infra`)
 

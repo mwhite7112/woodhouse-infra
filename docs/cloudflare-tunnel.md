@@ -5,7 +5,7 @@ Outbound-only tunnel connecting the cluster to Cloudflare's edge network. Expose
 - **Namespace:** `cloudflare-tunnel` (pod-security: `baseline`)
 - **Install method:** Raw manifests (Deployment + ConfigMap + Secret)
 - **Replicas:** 2
-- **Image:** `cloudflare/cloudflared:2025.2.1`
+- **Image:** `cloudflare/cloudflared:2025.2.1@sha256:03737f27c38ecfb257a55664953cac510727cf27052c51ddb7c8ff1a2b9969e1`
 - **Backend:** `http://traefik.traefik.svc.cluster.local:80` (catch-all)
 - **Metrics:** Exposed on port 2000 (`/ready` endpoint)
 - **Domain:** `woodlab.work` (wildcard `*.woodlab.work` included)

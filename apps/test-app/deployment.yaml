@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: test-app
-          image: ghcr.io/mwhite7112/homelab-test:latest
+          image: ghcr.io/mwhite7112/homelab-test:8cdc568fe7a85625605b4cb2eaff1042cb599d41@sha256:3039eb7b6a8e5c73aabebc278f001c6e69ff694e95e3ffc1e9c9f1697faf16b6
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
           livenessProbe:
