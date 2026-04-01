@@ -5,3 +5,4 @@ resources:
   - helmrepository.yaml
   - grafana-secret.yaml
   - helmrelease.yaml
+  - ingress.yaml

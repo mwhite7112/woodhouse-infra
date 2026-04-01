@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - grafana-datasource.yaml
   - helmrelease.yaml
+  - ingress.yaml

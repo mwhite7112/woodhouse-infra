@@ -42,11 +42,11 @@ data:
             description: Dashboards & visualization
             icon: grafana.png
         - VictoriaMetrics:
-            href: https://grafana.woodlab.work
+            href: https://victoriametrics.woodlab.work/vmui
             description: Metrics storage (30d retention)
             icon: victoriametrics.png
         - VictoriaLogs:
-            href: https://grafana.woodlab.work
+            href: https://victorialogs.woodlab.work/select/vmui
             description: Log aggregation (7d retention)
             icon: victoriametrics.png
     - Storage:
