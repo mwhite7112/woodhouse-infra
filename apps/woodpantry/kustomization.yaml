@@ -7,4 +7,5 @@ resources:
   - ingredients
   - recipes
   - pantry
+  - ingestion
   - matching
