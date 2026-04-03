@@ -1,0 +1,130 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: woodpantry-legal-pages
+  namespace: woodpantry
+data:
+  index.html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>WoodPantry Legal</title>
+        <style>
+          body { font-family: sans-serif; margin: 0; background: #f6f3ea; color: #1f2937; }
+          main { max-width: 720px; margin: 0 auto; padding: 48px 24px; }
+          h1 { margin-bottom: 12px; }
+          a { color: #0f766e; }
+          .card { background: #fffdf7; border: 1px solid #d6d3d1; border-radius: 12px; padding: 20px; }
+        </style>
+      </head>
+      <body>
+        <main>
+          <h1>WoodPantry SMS Policies</h1>
+          <div class="card">
+            <p>WoodPantry is a self-hosted pantry ingest app that sends transactional SMS replies when a user texts pantry items to the service.</p>
+            <p><a href="/privacy">Privacy Policy</a></p>
+            <p><a href="/terms">Terms and Conditions</a></p>
+          </div>
+        </main>
+      </body>
+    </html>
+  privacy.html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>WoodPantry Privacy Policy</title>
+        <style>
+          body { font-family: sans-serif; margin: 0; background: #f6f3ea; color: #1f2937; }
+          main { max-width: 760px; margin: 0 auto; padding: 48px 24px 72px; }
+          h1, h2 { color: #111827; }
+          a { color: #0f766e; }
+          p, li { line-height: 1.6; }
+        </style>
+      </head>
+      <body>
+        <main>
+          <p><a href="/">WoodPantry Legal</a></p>
+          <h1>Privacy Policy</h1>
+          <p>WoodPantry uses your phone number and message content only to receive pantry ingestion requests and send transactional replies related to those requests.</p>
+          <h2>What We Collect</h2>
+          <ul>
+            <li>Your phone number</li>
+            <li>Message content you send to the WoodPantry number</li>
+            <li>Operational metadata needed to process and reply to your request</li>
+          </ul>
+          <h2>How We Use It</h2>
+          <ul>
+            <li>To parse pantry ingestion requests that you send by SMS</li>
+            <li>To send staging, confirmation, help, and opt-out related replies</li>
+            <li>To operate the WoodPantry service and troubleshoot delivery or processing issues</li>
+          </ul>
+          <h2>Sharing</h2>
+          <p>WoodPantry uses service providers such as Twilio for SMS delivery and infrastructure providers that host the application. Information is not sold or used for marketing.</p>
+          <h2>Messaging Preferences</h2>
+          <p>You can reply STOP to opt out of SMS messages, START to opt back in, and HELP for help.</p>
+          <h2>Contact</h2>
+          <p>For support, reply HELP to the WoodPantry number.</p>
+        </main>
+      </body>
+    </html>
+  terms.html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>WoodPantry Terms and Conditions</title>
+        <style>
+          body { font-family: sans-serif; margin: 0; background: #f6f3ea; color: #1f2937; }
+          main { max-width: 760px; margin: 0 auto; padding: 48px 24px 72px; }
+          h1, h2 { color: #111827; }
+          a { color: #0f766e; }
+          p, li { line-height: 1.6; }
+        </style>
+      </head>
+      <body>
+        <main>
+          <p><a href="/">WoodPantry Legal</a></p>
+          <h1>Terms and Conditions</h1>
+          <p>WoodPantry sends transactional SMS messages related to pantry ingestion requests initiated by the user.</p>
+          <h2>Consent</h2>
+          <p>By texting the WoodPantry number, you consent to receive transactional SMS messages about your pantry ingestion request. Message frequency varies based on your use of the service.</p>
+          <h2>Supported Keywords</h2>
+          <ul>
+            <li>CONFIRM: confirm the latest staged pantry update</li>
+            <li>HELP: request help information</li>
+            <li>STOP: opt out of messages</li>
+            <li>START: opt back in after opting out</li>
+          </ul>
+          <h2>Fees</h2>
+          <p>Message and data rates may apply depending on your mobile carrier plan.</p>
+          <h2>Scope</h2>
+          <p>WoodPantry messages are transactional and are used to stage pantry items, confirm staged updates, and send related operational notices.</p>
+          <h2>Contact</h2>
+          <p>For help, reply HELP to the WoodPantry number.</p>
+        </main>
+      </body>
+    </html>
+  nginx.conf: |
+    server {
+      listen 80;
+      server_name _;
+      root /usr/share/nginx/html;
+      index index.html;
+
+      location = / {
+        try_files /index.html =404;
+      }
+
+      location = /privacy {
+        try_files /privacy.html =404;
+      }
+
+      location = /terms {
+        try_files /terms.html =404;
+      }
+    }
