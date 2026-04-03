@@ -8,7 +8,7 @@ spec:
     - host: woodpantry.woodlab.work
       http:
         paths:
-          - path: /
+          - path: /legal
             pathType: Prefix
             backend:
               service:

@@ -24,8 +24,8 @@ data:
           <h1>WoodPantry SMS Policies</h1>
           <div class="card">
             <p>WoodPantry is a self-hosted pantry ingest app that sends transactional SMS replies when a user texts pantry items to the service.</p>
-            <p><a href="/privacy">Privacy Policy</a></p>
-            <p><a href="/terms">Terms and Conditions</a></p>
+            <p><a href="/legal/privacy">Privacy Policy</a></p>
+            <p><a href="/legal/terms">Terms and Conditions</a></p>
           </div>
         </main>
       </body>
@@ -47,7 +47,7 @@ data:
       </head>
       <body>
         <main>
-          <p><a href="/">WoodPantry Legal</a></p>
+          <p><a href="/legal">WoodPantry Legal</a></p>
           <h1>Privacy Policy</h1>
           <p>WoodPantry uses your phone number and message content only to receive pantry ingestion requests and send transactional replies related to those requests.</p>
           <h2>What We Collect</h2>
@@ -88,7 +88,7 @@ data:
       </head>
       <body>
         <main>
-          <p><a href="/">WoodPantry Legal</a></p>
+          <p><a href="/legal">WoodPantry Legal</a></p>
           <h1>Terms and Conditions</h1>
           <p>WoodPantry sends transactional SMS messages related to pantry ingestion requests initiated by the user.</p>
           <h2>Consent</h2>
@@ -116,15 +116,19 @@ data:
       root /usr/share/nginx/html;
       index index.html;
 
-      location = / {
+      location = /legal {
         try_files /index.html =404;
       }
 
-      location = /privacy {
+      location = /legal/ {
+        return 302 /legal;
+      }
+
+      location = /legal/privacy {
         try_files /privacy.html =404;
       }
 
-      location = /terms {
+      location = /legal/terms {
         try_files /terms.html =404;
       }
     }
