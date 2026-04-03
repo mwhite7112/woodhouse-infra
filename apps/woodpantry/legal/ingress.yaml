@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: woodpantry-legal
+  namespace: woodpantry
+spec:
+  rules:
+    - host: woodpantry.woodlab.work
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: woodpantry-legal
+                port:
+                  number: 80
